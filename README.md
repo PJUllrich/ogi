@@ -1,8 +1,12 @@
-# OGI
+# OGI (Oh Gee)
 
 Generates and serves OpenGraph Images using Typst.
 
 Inspired by [OG-Image](https://github.com/svycal/og-image/tree/main) but uses Typst instead of Chrome+Puppeteer, so you can add it directly to your Phoenix app.
+
+Generates (beautiful?) share images like this one for my blog [peterullrich.com](https://peterullrich.com)
+
+![](example.png)
 
 ## Installation
 
@@ -25,6 +29,12 @@ You need these three things:
 ### 1. The Typst Template
 
 LLMs are pretty good at generating those and you can test them quickly on [typst.app/play](https://typst.app/play/)
+
+Make sure that your markup follows the best-practices of OpenGraph Images which are:
+
+- Dimensions of ideally `1200x630`
+- No more than `5MB`
+- A bit of filled margin at the edges to prevent cropping of text
 
 ### 2. The Phoenix Controller and Route
 
