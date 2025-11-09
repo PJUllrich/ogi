@@ -86,7 +86,7 @@ defmodule Ogi.Cache do
   @doc """
   Cleans out the cache by deleting all stored files.
   """
-  def clean!() do
+  def clean! do
     cache_dir()
     |> File.ls!()
     |> Enum.each(fn file ->
@@ -99,7 +99,7 @@ defmodule Ogi.Cache do
   end
 
   defp cache_dir do
-    Path.join(System.tmp_dir!(), "ogi_cache")
+    cache_dir_config() || Path.join(System.tmp_dir!(), "ogi_cache")
   end
 
   defp hash_assigns(assigns) do
@@ -114,5 +114,6 @@ defmodule Ogi.Cache do
     |> Base.url_encode64(padding: false)
   end
 
-  defp cache_enabled?(), do: Application.get_env(:ogi, :cache, true)
+  defp cache_enabled?, do: Application.get_env(:ogi, :cache, true)
+  defp cache_dir_config, do: Application.get_env(:ogi, :cache_dir)
 end
