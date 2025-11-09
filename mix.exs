@@ -25,11 +25,12 @@ defmodule Ogi.MixProject do
     [
       {:typst, "~> 0.1"},
       {:plug, ">= 0.0.0"},
-      {:ex_doc, "~> 0.39", only: :dev, runtime: false}
+      {:quokka, "~> 2.8", only: [:dev, :test], runtime: false, optional: true},
+      {:ex_doc, "~> 0.39", only: :dev, runtime: false, optional: true}
     ]
   end
 
-  defp package() do
+  defp package do
     [
       name: "ogi",
       files: ~w(lib .formatter.exs mix.exs README* LICENSE*
