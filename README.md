@@ -54,7 +54,8 @@ defmodule BlogWeb.ImageController do
   def show(conn, %{"id" => blog_id}) do
     post = Posts.get_post_by_id!(blog_id)
     assigns = [title: post.title]
-    Ogi.render_image(conn, "#{blog_id}.png", typst_markup(), assigns, root_dir: typst_root(), extra_fonts: [fonts_dir()])
+    opts = [root_dir: typst_root(), extra_fonts: [fonts_dir()]]
+    Ogi.render_image(conn, "#{blog_id}.png", typst_markup(), assigns, opts)
   end
 
   # these paths need to be called at runtime for releases
@@ -117,11 +118,17 @@ a browser extension that previews OpenGraph information for a website.
 
 ## Configuration
 
-Currently, OGI only supports the following configuration:
+Currently, OGI supports the following configurations:
 
 ```elixir
-# Whether to cache rendered images or not (default: true)
-config :ogi, cache: true|false
+config :ogi,
+  # Whether to cache rendered images or not (default: true)
+  cache: true,
+  # Where to store the cache. Defaults to a temporary folder.
+  cache_dir: "./some/custom/dir",
+  # An optional fallback image which is returned if the rendering
+  # of the OG Image using Typst fails.
+  fallback_image_path: "./priv/static/some-image.png"
 ```
 
 ## Caveats
@@ -143,10 +150,10 @@ and other file resources in `priv/typst`.
 ## ToDo's
 
 - [ ] Emoji Support
-- [ ] Clean up Cache when a certain size is reached
-- [ ] Add fallback OG Image option if render fails
 - [ ] Support for templates
-- [ ] Make cache dir path configurable.
+- [ ] Clean up Cache when a certain size is reached
 - [ ] Allow per-request disabling of fetch/put/both cache operations
 - [ ] Allow async rendering. Useful for cache warmup.
-- [ ] Unit tests 😬
+- [x] Add fallback OG Image option if render fails
+- [x] Make cache dir path configurable.
+- [x] Unit tests 😬
