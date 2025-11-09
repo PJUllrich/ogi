@@ -6,31 +6,47 @@ defmodule Ogi do
   """
 
   alias Ogi.Cache
+  alias Ogi.Config
 
   require Logger
 
   @doc """
   Renders a Typst markup with given assigns and filename to a PNG binary.
 
-  Optionally retrieves a cached version of the image and writes the image to a cache directory if the cache is enabled.
+  ## Options
+
+  * `typst_opts` - options that get passed directly to `Typst.render_to_png/3`
+  * `cache_enabled` - enable/disable the cache
+  * `fallback_image_path` - the filepath to a fallback image if the render fails
+
   """
   def render_to_png(filename, typst_markup, assigns \\ [], opts \\ []) do
-    with {:error, :not_found} <- Cache.maybe_get_cached_image(filename, assigns),
+    allowed_opts = [:typst_opts, :cache_enabled, :fallback_image_path]
+
+    default_opts = [
+      typst_opts: [],
+      cache_enabled: Config.cache_enabled?(),
+      fallback_image_path: Config.fallback_image_path()
+    ]
+
+    with {:ok, opts} <- Config.validate_opts(opts, allowed_opts, default_opts),
+         {:error, :not_found} <-
+           Cache.maybe_get_cached_image(filename, assigns, opts[:cache_enabled]),
          {:ok, png} <- do_render_to_png(typst_markup, assigns, opts),
-         :ok <- Cache.maybe_put_image(filename, assigns, png) do
+         :ok <- Cache.maybe_put_image(filename, assigns, png, opts[:cache_enabled]) do
       {:ok, png}
     end
   end
 
   defp do_render_to_png(typst_markup, assigns, opts) do
-    case Typst.render_to_png(typst_markup, assigns, opts) do
+    case Typst.render_to_png(typst_markup, assigns, opts[:typst_opts]) do
       {:ok, [png | _rest]} ->
         {:ok, png}
 
       {:error, error} ->
         Logger.error("Failed to render Typst markup: #{inspect(error)}")
 
-        if path = fallback_image_path() do
+        if path = opts[:fallback_image_path] do
           return_fallback_image(path)
         else
           {:error, error}
@@ -48,8 +64,6 @@ defmodule Ogi do
         {:error, error}
     end
   end
-
-  defp fallback_image_path, do: Application.get_env(:ogi, :fallback_image_path)
 
   @doc """
   Renders an OpenGraph Image and sends it as response for a `Plug.Conn`.

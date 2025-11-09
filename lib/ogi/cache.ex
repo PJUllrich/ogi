@@ -3,17 +3,19 @@ defmodule Ogi.Cache do
   Caches the rendered images based on their filename and assigns in a temporary folder.
   """
 
+  alias Ogi.Config
+
   @doc """
   Maybe returns `{:ok, cached_image}`, but only if the Cache is enabled
   and the cached image could be found in the cache dir. Otherwise,
   returns `{:error, :not_found}`.
   """
-  def maybe_get_cached_image(filename, assigns) do
-    if cache_enabled?() do
-      get(filename, assigns)
-    else
-      {:error, :not_found}
-    end
+  def maybe_get_cached_image(_filename, _assigns, false = _cache_enabled) do
+    {:error, :not_found}
+  end
+
+  def maybe_get_cached_image(filename, assigns, _cache_enabled) do
+    get(filename, assigns)
   end
 
   @doc """
@@ -22,12 +24,12 @@ defmodule Ogi.Cache do
   Returns `:ok` if the cache is disabled or if the image was written to cache.
   Returns `{:error, io_error}` if writing the image failed.
   """
-  def maybe_put_image(filename, assigns, content) do
-    if cache_enabled?() do
-      put(filename, assigns, content)
-    else
-      :ok
-    end
+  def maybe_put_image(_filename, _assigns, _content, false = _cache_enabled) do
+    :ok
+  end
+
+  def maybe_put_image(filename, assigns, content, _cache_enabled) do
+    put(filename, assigns, content)
   end
 
   @doc """
@@ -58,7 +60,7 @@ defmodule Ogi.Cache do
   def get(filename, assigns) do
     cache_key = get_cache_key(filename, assigns)
 
-    cache_dir()
+    Config.cache_dir()
     |> Path.join(cache_key)
     |> File.read()
     |> case do
@@ -74,11 +76,11 @@ defmodule Ogi.Cache do
   Returns `:ok` or `{:error, io_error}`.
   """
   def put(filename, assigns, content) do
-    File.mkdir_p!(cache_dir())
+    File.mkdir_p!(Config.cache_dir())
 
     cache_key = get_cache_key(filename, assigns)
 
-    cache_dir()
+    Config.cache_dir()
     |> Path.join(cache_key)
     |> File.write(content)
   end
@@ -87,19 +89,15 @@ defmodule Ogi.Cache do
   Cleans out the cache by deleting all stored files.
   """
   def clean! do
-    cache_dir()
+    Config.cache_dir()
     |> File.ls!()
     |> Enum.each(fn file ->
-      cache_dir()
+      Config.cache_dir()
       |> Path.join(file)
       |> File.rm!()
     end)
 
     :ok
-  end
-
-  defp cache_dir do
-    cache_dir_config() || Path.join(System.tmp_dir!(), "ogi_cache")
   end
 
   defp hash_assigns(assigns) do
@@ -113,7 +111,4 @@ defmodule Ogi.Cache do
     |> :crypto.hash(term)
     |> Base.url_encode64(padding: false)
   end
-
-  defp cache_enabled?, do: Application.get_env(:ogi, :cache, true)
-  defp cache_dir_config, do: Application.get_env(:ogi, :cache_dir)
 end

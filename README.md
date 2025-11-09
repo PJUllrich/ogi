@@ -16,7 +16,7 @@ Generates (beautiful?) share images like this one for my blog
 ```elixir
 def deps do
   [
-    {:ogi, "~> 0.1.0"}
+    {:ogi, "~> 0.2.0"}
   ]
 end
 ```
@@ -54,7 +54,7 @@ defmodule BlogWeb.ImageController do
   def show(conn, %{"id" => blog_id}) do
     post = Posts.get_post_by_id!(blog_id)
     assigns = [title: post.title]
-    opts = [root_dir: typst_root(), extra_fonts: [fonts_dir()]]
+    opts = [typst_opts: [root_dir: typst_root(), extra_fonts: [fonts_dir()]]]
     Ogi.render_image(conn, "#{blog_id}.png", typst_markup(), assigns, opts)
   end
 
@@ -152,8 +152,8 @@ and other file resources in `priv/typst`.
 - [ ] Emoji Support
 - [ ] Support for templates
 - [ ] Clean up Cache when a certain size is reached
-- [ ] Allow per-request disabling of fetch/put/both cache operations
 - [ ] Allow async rendering. Useful for cache warmup.
+- [x] Allow per-request disabling cache operations
 - [x] Add fallback OG Image option if render fails
 - [x] Make cache dir path configurable.
 - [x] Unit tests 😬
