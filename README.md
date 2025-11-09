@@ -2,9 +2,12 @@
 
 Generates and serves OpenGraph Images using Typst.
 
-Inspired by [OG-Image](https://github.com/svycal/og-image/tree/main) but uses Typst instead of Chrome+Puppeteer, so you can add it directly to your Phoenix app.
+Inspired by [OG-Image](https://github.com/svycal/og-image/tree/main) but uses
+Typst instead of Chrome+Puppeteer, so you can add it directly to your Phoenix
+app.
 
-Generates (beautiful?) share images like this one for my blog [peterullrich.com](https://peterullrich.com)
+Generates (beautiful?) share images like this one for my blog
+[peterullrich.com](https://peterullrich.com)
 
 ![](example.png)
 
@@ -28,9 +31,11 @@ You need these three things:
 
 ### 1. The Typst Template
 
-LLMs are pretty good at generating those and you can test them quickly on [typst.app/play](https://typst.app/play/)
+LLMs are pretty good at generating those and you can test them quickly on
+[typst.app/play](https://typst.app/play/)
 
-Make sure that your markup follows the best-practices of OpenGraph Images which are:
+Make sure that your markup follows the best-practices of OpenGraph Images which
+are:
 
 - Dimensions of ideally `1200x630`
 - No more than `5MB`
@@ -49,16 +54,32 @@ defmodule BlogWeb.ImageController do
   def show(conn, %{"id" => blog_id}) do
     post = Posts.get_post_by_id!(blog_id)
     assigns = [title: post.title]
-    Ogi.render_image(conn, "#{blog_id}.png", typst_markup(), assigns)
+    Ogi.render_image(conn, "#{blog_id}.png", typst_markup(), assigns, root_dir: typst_root(), extra_fonts: [fonts_dir()])
   end
 
+  # these paths need to be called at runtime for releases
+  defp typst_root, do: Application.app_dir(:blog, "priv/typst")
+  defp fonts_dir, do: Path.join(typst_root(), "fonts")
+
   defp typst_markup do
-    # Your generated Typst markup goes here.
+    # Your Typst markup goes here.
     #
     # You can dynamically inline variables with:
     # Blog Title: <%= title %>
     #
     # Note: There is *no* @ before the variable other than in HEEx templates!
+
+    # Example template:
+    """
+    #set page(width: 1200pt, height: 630pt, margin: 64pt)
+    #set text(size: 64pt)
+
+    #place(center + horizon)[
+      = Hello World!
+
+      <%= title %>
+    ]
+    """
   end
 end
 ```
@@ -73,7 +94,8 @@ end
 
 ### 3. The Metatag
 
-For adding dynamic Metatags, I recommend the [Metatags](https://github.com/johantell/metatags) library:
+For adding dynamic Metatags, I recommend the
+[Metatags](https://github.com/johantell/metatags) library:
 
 ```elixir
 # In your Controller or LiveView serving the blog post, add this:
@@ -90,7 +112,8 @@ def handle_params(%{"id" => post_id}, _url, socket) do
 end
 ```
 
-And that's it! You can test this by navigating to the route manually or by using a browser extension that previews OpenGraph information for a website.
+And that's it! You can test this by navigating to the route manually or by using
+a browser extension that previews OpenGraph information for a website.
 
 ## Configuration
 
@@ -103,13 +126,19 @@ config :ogi, cache: true|false
 
 ## Caveats
 
-### Missing fonts
+### Adding Fonts and Images
 
-You need to use a font that is available on your system, otherwise Typst will fall back to a `serif` font, unless you set `fallback: false` on a `#text` which means Tyst will simply not render the text at all.
+Typst has access to system fonts, as well as fonts in directories specified by
+the `extra_fonts` option. If a font is unavailable, Typst will fallback to a
+`serif` font, unless you set `fallback: false` on a `#text`. In this case Typst
+will simply not render the text at all.
 
-For local development, you can run `typst fonts` to list all available fonts.
+If you have the `typst-cli` installed on your system, you can run `typst fonts`
+to list all available fonts.
 
-For remote deployment, I recommend researching which fonts are installed by default on your runner OS, for example on [Debian](https://wiki.debian.org/Fonts). You can always install the font you like with the package manager and it will become automatically available to Typst.
+For remote deployment, it is recommended to bundle fonts with your application.
+The example above places fonts in the `priv/typst/fonts` directory, and images
+and other file resources in `priv/typst`.
 
 ## ToDo's
 
