@@ -118,6 +118,18 @@ end
 And that's it! You can test this by navigating to the route manually or by using
 a browser extension that previews OpenGraph information for a website.
 
+## Caveats
+
+### How to add Fonts and Images
+
+Typst has access to system fonts, as well as fonts in directories specified by the `extra_fonts` option. If a font is unavailable, Typst will fallback to a `serif` font, unless you set `fallback: false` on a `#text`. In this case Typst will simply not render the text at all.
+
+It is recommended to bundle fonts with your application. The example above places fonts in the `priv/typst/fonts` directory, and images and other file resources in `priv/typst`.
+
+### Don't use variable fonts
+
+When adding fonts, make sure to add non-variable fonts (e.g. `FiraSans-Bold.tff` and `FiraSans-SemiBold.tff` etc.) instead of variable fonts (e.g. `FiraSans.tff`) because *Typst does not support variable fonts* ([yet](https://github.com/typst/typst/issues/185))! If you add a variable font, Typst will always render the same font weight.
+
 ## Configuration
 
 Currently, OGI supports the following configurations:
@@ -132,22 +144,6 @@ config :ogi,
   # of the OG Image using Typst fails.
   fallback_image_path: "./priv/static/some-image.png"
 ```
-
-## Caveats
-
-### Adding Fonts and Images
-
-Typst has access to system fonts, as well as fonts in directories specified by
-the `extra_fonts` option. If a font is unavailable, Typst will fallback to a
-`serif` font, unless you set `fallback: false` on a `#text`. In this case Typst
-will simply not render the text at all.
-
-If you have the `typst-cli` installed on your system, you can run `typst fonts`
-to list all available fonts.
-
-For remote deployment, it is recommended to bundle fonts with your application.
-The example above places fonts in the `priv/typst/fonts` directory, and images
-and other file resources in `priv/typst`.
 
 ## Examples
 
