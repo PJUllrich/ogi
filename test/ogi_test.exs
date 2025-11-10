@@ -26,6 +26,10 @@ defmodule OgiTest do
   )
   """
 
+  setup_all do
+    on_exit(fn -> Ogi.Cache.clean!() end)
+  end
+
   describe "render_to_png/4" do
     test "renders a simple markup" do
       filename = "test-1.png"
@@ -91,7 +95,7 @@ defmodule OgiTest do
     test "returns a fallback image if the render fails" do
       filename = "test-4-2.png"
       assigns = []
-      opts = [fallback_image_path: "./example.png", cache_enabled: false]
+      opts = [fallback_image_path: "./example.png"]
 
       assert capture_log(fn ->
                assert {:ok, <<137, 80, 78, 71, 13, 10, _rest::binary>>} =

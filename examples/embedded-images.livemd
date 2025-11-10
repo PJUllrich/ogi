@@ -1,0 +1,34 @@
+# Embedding Images
+
+```elixir
+Mix.install([
+  {:ogi, "~> 0.2.0"},
+  {:kino, "~> 0.17.0"}
+])
+```
+
+## Section
+
+```elixir
+markup = """
+#set page(width: 1200pt, height: 630pt, margin: 64pt, fill: rgb("#000"))
+#set text(size: 64pt, fill: rgb("#fff"))
+
+// https://typst.app/docs/reference/visualize/image/
+#image("joke.jpeg")
+
+#place(
+  right + horizon,
+  text(size: 80pt, [Some joke])
+)
+"""
+
+# It's important to set the `root_dir` on Typst when rendering or importing files
+# into the markup because by default Typst reads files only from it's "Project Root"
+# and doesn't allow absolute paths or relative paths to parent directories.
+# See: https://typst.app/docs/reference/syntax/#paths
+opts = [cache_enabled: false, typst_opts: [root_dir: Path.absname(__DIR__)]]
+{:ok, image} = Ogi.render_to_png("embedded-image.png", markup, [], opts)
+
+Kino.render(image)
+```

@@ -1,0 +1,34 @@
+# Render Emojis
+
+```elixir
+Mix.install([
+  {:ogi, "~> 0.2.0"},
+  {:kino, "~> 0.17.0"}
+])
+```
+
+## Section
+
+```elixir
+markup = """
+
+#import emoji: face
+
+#set page(width: 1200pt, height: 630pt, margin: 64pt) 
+#set text(size: 64pt)
+
+// You use the #emoji prefix like e.g. #emoji.map.world
+#place(center + horizon)[Hello world #emoji.map.world!]
+
+// Or you can import emojis and then use them with e.g. #face
+#place(center + bottom)[#face]
+
+// All available emojis can be found here:
+// https://typst.app/docs/reference/symbols/emoji/
+
+"""
+
+{:ok, image} = Ogi.render_to_png("emoji.png", markup, [], [cache_enabled: false])
+
+Kino.render(image)
+```

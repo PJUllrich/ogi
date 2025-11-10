@@ -68,18 +68,20 @@ defmodule BlogWeb.ImageController do
     # You can dynamically inline variables with:
     # Blog Title: <%= title %>
     #
-    # Note: There is *no* @ before the variable other than in HEEx templates!
-
-    # Example template:
+    # Note: There is *no* @ before the variable, other than in HEEx templates!
+    #
+    # Example:
     """
-    #set page(width: 1200pt, height: 630pt, margin: 64pt)
-    #set text(size: 64pt)
+    #set page(
+      width: 1200pt,
+      height: 630pt,
+      margin: 64pt,
+      fill: rgb("#0a1929")
+    )
+    #set text(size: 64pt, fill: white)
 
-    #place(center + horizon)[
-      = Hello World!
-
-      <%= title %>
-    ]
+    #place(center + horizon)[Hello World!]
+    #place(center + bottom)[By <%= author %>]
     """
   end
 end
@@ -147,12 +149,20 @@ For remote deployment, it is recommended to bundle fonts with your application.
 The example above places fonts in the `priv/typst/fonts` directory, and images
 and other file resources in `priv/typst`.
 
+## Examples
+
+You can find Livebooks with examples of various use-cases in the `examples` folder.
+
+- [Embedding Images](/examples/emdedded-images.livemd)
+- [Using Emojis](/examples/emojis.livemd)
+- [Reusing Templates](/examples/templates.livemd)
+
 ## ToDo's
 
-- [ ] Emoji Support
-- [ ] Support for templates
 - [ ] Clean up Cache when a certain size is reached
 - [ ] Allow async rendering. Useful for cache warmup.
+- [x] Emoji Support
+- [x] Support for templates
 - [x] Allow per-request disabling cache operations
 - [x] Add fallback OG Image option if render fails
 - [x] Make cache dir path configurable.

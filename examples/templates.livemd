@@ -1,0 +1,37 @@
+# Templates
+
+```elixir
+Mix.install([
+  {:ogi, "~> 0.2.0"},
+  {:kino, "~> 0.17.0"}
+])
+```
+
+## Section
+
+```elixir
+# You can embed reusable templates simply using String interpolation since
+# Typst markups are text-based.
+
+logo = """
+#text(size: 40pt)[My Cool Company]
+"""
+
+markup = """
+#set page(width: 1200pt, height: 630pt, margin: 64pt)
+#set text(size: 64pt)
+
+#place(top + left)[
+  #{logo}
+]
+
+#place(center + horizon)[
+  = Hello world!
+]
+"""
+
+{:ok, image} = Ogi.render_to_png("templates.png", markup, [], [cache_enabled: false])
+
+Kino.render(image)
+
+```
