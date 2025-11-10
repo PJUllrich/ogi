@@ -90,12 +90,18 @@ defmodule Ogi.Cache do
   """
   def clean! do
     Config.cache_dir()
-    |> File.ls!()
-    |> Enum.each(fn file ->
-      Config.cache_dir()
-      |> Path.join(file)
-      |> File.rm!()
-    end)
+    |> File.ls()
+    |> case do
+      {:ok, files} ->
+        Enum.each(files, fn file ->
+          Config.cache_dir()
+          |> Path.join(file)
+          |> File.rm()
+        end)
+
+      _error ->
+        :ok
+    end
 
     :ok
   end

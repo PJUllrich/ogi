@@ -95,7 +95,7 @@ defmodule OgiTest do
     test "returns a fallback image if the render fails" do
       filename = "test-4-2.png"
       assigns = []
-      opts = [fallback_image_path: "./example.png"]
+      opts = [fallback_image_path: "./assets/example.png"]
 
       assert capture_log(fn ->
                assert {:ok, <<137, 80, 78, 71, 13, 10, _rest::binary>>} =

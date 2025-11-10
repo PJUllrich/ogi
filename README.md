@@ -16,7 +16,7 @@ Generates (beautiful?) share images like this one for my blog
 ```elixir
 def deps do
   [
-    {:ogi, "~> 0.2.1"}
+    {:ogi, "~> 0.2.2"}
   ]
 end
 ```
@@ -128,7 +128,7 @@ It is recommended to bundle fonts with your application. The example above place
 
 ### Don't use variable fonts
 
-When adding fonts, make sure to add non-variable fonts (e.g. `FiraSans-Bold.tff` and `FiraSans-SemiBold.tff` etc.) instead of variable fonts (e.g. `FiraSans.tff`) because *Typst does not support variable fonts* ([yet](https://github.com/typst/typst/issues/185))! If you add a variable font, Typst will always render the same font weight.
+When adding fonts, make sure to add non-variable fonts (e.g. `FiraSans-Bold.tff` and `FiraSans-SemiBold.tff` etc.) instead of variable fonts (e.g. `FiraSans.tff`) because **Typst does not support variable fonts** ([yet](https://github.com/typst/typst/issues/185))! If you add a variable font, Typst will always render the same font weight.
 
 ## Configuration
 
