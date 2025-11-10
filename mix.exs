@@ -1,15 +1,19 @@
 defmodule Ogi.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/PJUllrich/ogi"
+  @version "0.2.1"
+
   def project do
     [
       app: :ogi,
-      version: "0.2.1",
+      version: @version,
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
       description: "Renders OpenGraph Images using Typst",
       package: package(),
-      deps: deps()
+      deps: deps(),
+      docs: docs()
     ]
   end
 
@@ -30,13 +34,34 @@ defmodule Ogi.MixProject do
     ]
   end
 
+  defp docs do
+    [
+      source_url: @source_url,
+      api_reference: false,
+      authors: ["Peter Ullrich"],
+      assets: %{"assets" => "assets"},
+      main: "readme",
+      extras: [
+        "README.md",
+        "CHANGELOG.md",
+        "examples/embedded-images.livemd",
+        "examples/emojis.livemd",
+        "examples/templates.livemd"
+      ],
+      groups_for_extras: [
+        Examples: [~r"examples/"]
+      ],
+      skip_undefined_reference_warnings_on: ["CHANGELOG.md"]
+    ]
+  end
+
   defp package do
     [
       name: "ogi",
       files: ~w(lib .formatter.exs mix.exs README* LICENSE*
                 CHANGELOG*),
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/pjullrich/ogi"}
+      links: %{"GitHub" => @source_url}
     ]
   end
 end

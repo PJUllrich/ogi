@@ -9,7 +9,7 @@ app.
 Generates (beautiful?) share images like this one for my blog
 [peterullrich.com](https://peterullrich.com)
 
-![](example.png)
+![](/assets/example.png)
 
 ## Installation
 
