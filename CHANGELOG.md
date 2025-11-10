@@ -1,6 +1,7 @@
 # v0.2.2
 
-- Fixed `Ogi.Cache.clean!()` exception if cache folder doesn't exist.
+- Renamed `Ogi.Cache.clean!` to simply `Ogi.Cache.clean` since it will never raise.
+- Fixed `Ogi.Cache.clean()` exception if cache folder doesn't exist.
 
 # v0.2.1
 

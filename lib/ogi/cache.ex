@@ -88,7 +88,7 @@ defmodule Ogi.Cache do
   @doc """
   Cleans out the cache by deleting all stored files.
   """
-  def clean! do
+  def clean do
     Config.cache_dir()
     |> File.ls()
     |> case do

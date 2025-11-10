@@ -27,7 +27,7 @@ defmodule OgiTest do
   """
 
   setup_all do
-    on_exit(fn -> Ogi.Cache.clean!() end)
+    on_exit(fn -> Ogi.Cache.cleank() end)
   end
 
   describe "render_to_png/4" do
