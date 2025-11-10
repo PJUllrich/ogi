@@ -2,7 +2,7 @@
 
 ```elixir
 Mix.install([
-  {:ogi, "~> 0.2.0"},
+  {:ogi, "~> 0.2.1"},
   {:kino, "~> 0.17.0"}
 ])
 ```
@@ -14,7 +14,7 @@ markup = """
 
 #import emoji: face
 
-#set page(width: 1200pt, height: 630pt, margin: 64pt) 
+#set page(width: 1200pt, height: 630pt, margin: 64pt)
 #set text(size: 64pt)
 
 // You use the #emoji prefix like e.g. #emoji.map.world

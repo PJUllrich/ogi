@@ -16,7 +16,7 @@ Generates (beautiful?) share images like this one for my blog
 ```elixir
 def deps do
   [
-    {:ogi, "~> 0.2.0"}
+    {:ogi, "~> 0.2.1"}
   ]
 end
 ```
@@ -153,7 +153,7 @@ and other file resources in `priv/typst`.
 
 You can find Livebooks with examples of various use-cases in the `examples` folder.
 
-- [Embedding Images](/examples/emdedded-images.livemd)
+- [Embedding Images](/examples/embedded-images.livemd)
 - [Using Emojis](/examples/emojis.livemd)
 - [Reusing Templates](/examples/templates.livemd)
 
