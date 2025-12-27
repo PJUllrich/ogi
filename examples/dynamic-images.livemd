@@ -1,0 +1,31 @@
+# Embed a dynamic Image using Base64
+
+```elixir
+Mix.install([
+  {:ogi, "~> 0.2.2"}
+])
+```
+
+## Section 1
+
+```elixir
+joke_base64 =
+  Path.absname(__DIR__)
+  |> Path.join("joke.jpeg")
+  |> File.read!()
+  |> Base.encode64()
+
+# You can embed images as Base64 encoded bytes using the `base64` library.
+# As `format`, you can either set a specific format (e.g. `png`) or let Typst
+# figure out the file format using `auto`.
+
+markup = """
+#import "@preview/based:0.2.0": base64
+
+#align(center)[
+  #image(base64.decode("#{joke_base64}"), format: auto, width: 18pt),
+]
+"""
+
+Ogi.render_to_png("dynamic-image.png", markup)
+```

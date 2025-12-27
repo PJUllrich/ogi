@@ -149,7 +149,8 @@ config :ogi,
 
 You can find Livebooks with examples of various use-cases in the `examples` folder.
 
-- [Embedding Images](/examples/embedded-images.livemd)
+- [Embed Images as Files](/examples/embedded-images.livemd)
+- [Embed Images as Bytes](/examples/dynamic-images.livemd)
 - [Using Emojis](/examples/emojis.livemd)
 - [Reusing Templates](/examples/templates.livemd)
 
