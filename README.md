@@ -81,7 +81,7 @@ defmodule BlogWeb.ImageController do
     #set text(size: 64pt, fill: white)
 
     #place(center + horizon)[Hello World!]
-    #place(center + bottom)[By <%= author %>]
+    #place(center + bottom)[Post: <%= title %>]
     """
   end
 end
