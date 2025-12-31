@@ -45,6 +45,7 @@ defmodule Ogi.MixProject do
         "README.md",
         "CHANGELOG.md",
         "examples/embedded-images.livemd",
+        "examples/dynamic-images.livemd",
         "examples/emojis.livemd",
         "examples/templates.livemd"
       ],
