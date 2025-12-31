@@ -2,7 +2,8 @@
 
 ```elixir
 Mix.install([
-  {:ogi, "~> 0.2.2"}
+  {:ogi, "~> 0.2.2"},
+  {:kino, "~> 0.17.0"}
 ])
 ```
 
@@ -20,12 +21,17 @@ joke_base64 =
 # figure out the file format using `auto`.
 
 markup = """
+#set page(width: 800pt, height: 700pt, margin: 64pt)
+
 #import "@preview/based:0.2.0": base64
 
-#align(center)[
-  #image(base64.decode("#{joke_base64}"), format: auto, width: 18pt),
-]
+#place(
+  right + horizon,
+  image(base64.decode("#{joke_base64}"), format: "jpg"),
+)
 """
 
-Ogi.render_to_png("dynamic-image.png", markup)
+{:ok, image} = Ogi.render_to_png("dynamic-image.png", markup, [], [cache_enabled: false])
+
+Kino.render(image)
 ```
